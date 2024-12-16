@@ -1,0 +1,40 @@
+GAS LISTING /tmp/ccuJlwEt.s 			page 1
+
+
+   1              		.file	"syscall_c.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              	.Letext0:
+   7              		.file 1 "src/../h/../lib/hw.h"
+GAS LISTING /tmp/ccuJlwEt.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 syscall_c.cpp
+     /tmp/ccuJlwEt.s:130    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccuJlwEt.s:298    .debug_str:0000000000000138 .LASF17
+     /tmp/ccuJlwEt.s:284    .debug_str:00000000000000bb .LASF18
+     /tmp/ccuJlwEt.s:276    .debug_str:000000000000006d .LASF19
+     /tmp/ccuJlwEt.s:258    .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccuJlwEt.s:260    .debug_str:0000000000000000 .LASF0
+     /tmp/ccuJlwEt.s:290    .debug_str:00000000000000f6 .LASF1
+     /tmp/ccuJlwEt.s:280    .debug_str:0000000000000097 .LASF2
+     /tmp/ccuJlwEt.s:274    .debug_str:0000000000000066 .LASF4
+     /tmp/ccuJlwEt.s:270    .debug_str:0000000000000041 .LASF3
+     /tmp/ccuJlwEt.s:266    .debug_str:000000000000002a .LASF5
+     /tmp/ccuJlwEt.s:272    .debug_str:0000000000000053 .LASF6
+     /tmp/ccuJlwEt.s:288    .debug_str:00000000000000e3 .LASF7
+     /tmp/ccuJlwEt.s:296    .debug_str:0000000000000128 .LASF8
+     /tmp/ccuJlwEt.s:262    .debug_str:000000000000000d .LASF9
+     /tmp/ccuJlwEt.s:264    .debug_str:000000000000001b .LASF10
+     /tmp/ccuJlwEt.s:294    .debug_str:0000000000000119 .LASF11
+     /tmp/ccuJlwEt.s:268    .debug_str:0000000000000031 .LASF12
+     /tmp/ccuJlwEt.s:292    .debug_str:0000000000000109 .LASF13
+     /tmp/ccuJlwEt.s:278    .debug_str:000000000000008b .LASF14
+     /tmp/ccuJlwEt.s:286    .debug_str:00000000000000cd .LASF15
+     /tmp/ccuJlwEt.s:282    .debug_str:00000000000000a5 .LASF16
+     /tmp/ccuJlwEt.s:9      .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS
