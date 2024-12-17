@@ -30,7 +30,7 @@ int sem_open (
 int sem_close (sem_t handle);
 int sem_wait (sem_t id);
 int sem_signal (sem_t id);
-int sem_trywait(sem_t id);
+int sem_tryWait(sem_t id);
 
 
 

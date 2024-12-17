@@ -50,6 +50,43 @@ void Riscv::handleSupervisorTrap() {
                 TCB::dispatch();
                 break;
             }
+            case 0x21: {
+                //sem_open
+                Semaphore** handle = (Semaphore**)arg1;
+                unsigned int init = (unsigned int)arg2;
+                Semaphore::createSemaphore(handle, init);
+                break;
+            }
+            case 0x22: {
+                //sem_close
+                Semaphore* id = (Semaphore*)arg1;
+                int retVal = Semaphore::close(id);
+                // funkcija za vracanje povratne vrednosti u riscv
+                delete id;
+                break;
+            }
+            case 0x23: {
+                //sem_wait
+                Semaphore* id = (Semaphore*)arg1;
+                int retVal = Semaphore::wait();
+                // funkcija za vracanje povratne vrednosti u riscv
+                break;
+            }
+            case 0x24: {
+                //sem_signal
+                Semaphore* id = (Semaphore*)arg1;
+                int retVal = Semaphore::signal();
+                // funkcija za vracanje povratne vrednosti u riscv
+                break;
+            }
+            case 0x26:{
+                //sem_tryWait
+                Semaphore* id = (Semaphore*)arg1;
+                int retVal = Semaphore::tryWait();
+                // funkcija za vracanje povratne vrednosti u riscv
+                break;
+            }
+
 
 
 

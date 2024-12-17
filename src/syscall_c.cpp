@@ -31,3 +31,43 @@ int thread_exit() {
 void thread_dispatch() {
     sysCall(0x13);
 }
+
+int sem_open(sem_t *handle, unsigned int init) {
+    if (!handle) return -1;
+    sysCall(0x21, (size_t)handle, init);
+    int volatile retVal = (int)Riscv::r_a0();
+    return retVal;
+
+}
+
+int sem_close(sem_t handle) {
+    if (!handle) return -1;
+    sysCall(0x22, (size_t)handle);
+    int volatile retVal = (int)Riscv::r_a0();
+    return retVal;
+}
+
+int sem_wait(sem_t id) {
+    if (!id) return -1;
+    sysCall(0x23, (size_t)id);
+    int volatile retVal = (int)Riscv::r_a0();
+    return retVal;
+}
+
+int sem_signal(sem_t id) {
+    if (!id) return -1;
+    sysCall(0x24, (size_t)id);
+    int volatile retVal = (int)Riscv::r_a0();
+    return retVal;
+}
+
+int sem_tryWait(sem_t id) {
+    if (!id) return -1;
+    sysCall(0x26, (size_t)id);
+    int volatile retVal = (int)Riscv::r_a0();
+    return retVal;
+}
+
+
+
+
