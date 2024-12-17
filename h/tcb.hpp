@@ -7,6 +7,7 @@
 
 #include "../lib/hw.h"
 #include "scheduler.hpp"
+#include "semaphore.hpp"
 
 
 class TCB{
@@ -30,6 +31,10 @@ public:
     static void yield();
 
     static TCB* running;
+
+    bool isBlocked() const;
+
+    void setBlocked(bool blocked);
 
 
 private:
@@ -58,6 +63,7 @@ private:
     uint64 timeSlice;
     bool finished; // da li je gotov thread
     void* arg;
+    bool blocked;
 
 
     friend class Riscv;
@@ -74,6 +80,7 @@ private:
     static uint64 constexpr TIME_SLICE = 2;
 
 
+    friend class Semaphore;
 
 };
 

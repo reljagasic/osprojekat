@@ -29,6 +29,7 @@ TCB::TCB(TCB::Body body, void *arg, char *stackSpace) {
     this->context.ra = (uint64) &threadWrapper;
     this->context.sp = stack ? (uint64)&stack[DEFAULT_STACK_SIZE] : 0;
     this->timeSlice = DEFAULT_TIME_SLICE;
+    this->blocked = false;
     if (body != nullptr ) Scheduler::put(this);
 
 }
@@ -38,6 +39,7 @@ uint64 TCB::timeSliceCounter = 0;
 
 void TCB::yield(){
 
+    __asm__ volatile("li a0, 0x13"); // dodati u riscv onaj case
     __asm__ volatile ("ecall");
 
 }
@@ -45,7 +47,7 @@ void TCB::yield(){
 void TCB::dispatch(){
 
     TCB* old = running;
-    if (!old->isFinished()){
+    if (!old->isFinished() || !old->isBlocked()){
         Scheduler::put(old);
     }
     running = Scheduler::get();
@@ -61,6 +63,14 @@ void TCB::threadWrapper() {
     running->setFinished(true);
     TCB::yield();
 
+}
+
+bool TCB::isBlocked() const {
+    return blocked;
+}
+
+void TCB::setBlocked(bool blocked) {
+    TCB::blocked = blocked;
 }
 
 
