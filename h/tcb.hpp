@@ -23,7 +23,9 @@ public:
 
     using Body = void(*)(); // pokazivac na funkciju bez argumenata i povratnih vrednosti
 
-    static TCB *createThread(Body body);
+    // static TCB *createThread(Body body); // stari sa snimka
+
+    static int createThread(TCB** handle, Body body = nullptr, void* arg = nullptr, char* stackAlloc = nullptr);
 
     static void yield();
 
@@ -32,16 +34,18 @@ public:
 
 private:
 
-    explicit TCB(Body body, uint64 timeSlice) :
-                body(body),
-                stack(body != nullptr ? new uint64[STACK_SIZE] : nullptr),
-                context({(uint64) &threadWrapper,
-                         stack != nullptr ? (uint64)&stack[STACK_SIZE] : 0
-                        }),
-                timeSlice(timeSlice),
-                finished(false) {
-         if (body != nullptr ) Scheduler::put(this);
-    }
+//    explicit TCB(Body body, uint64 timeSlice) :
+//                body(body),
+//                stack(body != nullptr ? new uint64[STACK_SIZE] : nullptr),
+//                context({(uint64) &threadWrapper,
+//                         stack != nullptr ? (uint64)&stack[STACK_SIZE] : 0
+//                        }),
+//                timeSlice(timeSlice),
+//                finished(false) {
+//         if (body != nullptr ) Scheduler::put(this);
+//    }
+
+    TCB(Body body, void* arg, char* stackSpace); // definisati ga u cpp
 
     struct Context{
         uint64 ra;
@@ -53,6 +57,8 @@ private:
     Context context;
     uint64 timeSlice;
     bool finished; // da li je gotov thread
+    void* arg;
+
 
     friend class Riscv;
 

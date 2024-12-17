@@ -15,15 +15,52 @@ void Riscv::popSppSpie(){
 void Riscv::handleSupervisorTrap() {
 
     uint64 scause = r_scause();
-    if (scause == 0x0000000000000009UL){
+    uint64 code = r_a0();
+    uint64 arg1 = r_a1();
+    uint64 arg2 = r_a2();
+    uint64 arg3 = r_a3();
+    uint64 arg4 = r_a4();
+    uint64 arg5 = r_a5();
 
-        // interrupt: no, cause code: environment call from s code
+    if (scause == 0x0000000000000009UL || scause == 0x0000000000000008UL){
+
+        // interrupt: no, cause code: ecall from any mode
         uint64 sepc = r_sepc() + 4; // ecall vraca na sebe a ne na seldecu funkciju zato pisemo + 4, instrukcije su 4 bajta
         uint64 sstatus = r_sstatus();
-        TCB::timeSliceCounter = 0;
-        TCB::dispatch();
-        w_sstatus(sstatus);
-        w_sepc(sepc);
+
+        switch (code){
+            case 0x11:{
+                // thread_create
+                TCB** handle = (TCB**)arg1;
+                TCB::Body startRoutine = (TCB::Body)arg2;
+                void* arg = (void*)arg3;
+                char* stackSpace = (char*)arg4;
+                int retVal = TCB::createThread(handle, startRoutine, arg, stackSpace);
+                // funkcija za vracanje povratne vrednosti u riscv
+                break;
+            }
+            case 0x12: {
+                //thread_exit
+                TCB::running->setFinished(true);
+                TCB::dispatch();
+                break;
+            }
+            case 0x13: {
+                //thread_dispatch
+                TCB::dispatch();
+                break;
+            }
+
+
+
+        }
+
+
+
+//        TCB::timeSliceCounter = 0;
+//        TCB::dispatch();
+//        w_sstatus(sstatus);
+//        w_sepc(sepc);
 
     }else if (scause == 0x8000000000000001UL){
 
