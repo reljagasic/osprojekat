@@ -5,6 +5,7 @@
 #include "../h/riscv.hpp"
 #include "../h/tcb.hpp"
 #include "../lib/console.h"
+#include "../h/print.hpp"
 
 void Riscv::popSppSpie(){
 
@@ -37,6 +38,10 @@ void Riscv::handleSupervisorTrap() {
                 char* stackSpace = (char*)arg4;
                 int retVal = TCB::createThread(handle, startRoutine, arg, stackSpace);
                 // funkcija za vracanje povratne vrednosti u riscv
+
+                // za vracanje povratnih vrednosti, kod greske se upisuje u a0, on se posle vadi i cita se; videti syscall_c.cpp
+                Riscv::w_a0(retVal); // u a0 upisati retVal
+
                 break;
             }
             case 0x12: {
@@ -54,7 +59,8 @@ void Riscv::handleSupervisorTrap() {
                 //sem_open
                 Semaphore** handle = (Semaphore**)arg1;
                 unsigned int init = (unsigned int)arg2;
-                Semaphore::createSemaphore(handle, init);
+                int retVal = Semaphore::createSemaphore(handle, init);
+                Riscv::w_a0(retVal); // u a0 upisati retVal
                 break;
             }
             case 0x22: {
@@ -62,6 +68,7 @@ void Riscv::handleSupervisorTrap() {
                 Semaphore* id = (Semaphore*)arg1;
                 int retVal = Semaphore::close(id);
                 // funkcija za vracanje povratne vrednosti u riscv
+                Riscv::w_a0(retVal); // u a0 upisati retVal
                 delete id;
                 break;
             }
@@ -70,6 +77,7 @@ void Riscv::handleSupervisorTrap() {
                 Semaphore* id = (Semaphore*)arg1;
                 int retVal = Semaphore::wait();
                 // funkcija za vracanje povratne vrednosti u riscv
+                Riscv::w_a0(retVal); // u a0 upisati retVal
                 break;
             }
             case 0x24: {
@@ -77,6 +85,7 @@ void Riscv::handleSupervisorTrap() {
                 Semaphore* id = (Semaphore*)arg1;
                 int retVal = Semaphore::signal();
                 // funkcija za vracanje povratne vrednosti u riscv
+                Riscv::w_a0(retVal); // u a0 upisati retVal
                 break;
             }
             case 0x26:{
@@ -84,22 +93,17 @@ void Riscv::handleSupervisorTrap() {
                 Semaphore* id = (Semaphore*)arg1;
                 int retVal = Semaphore::tryWait();
                 // funkcija za vracanje povratne vrednosti u riscv
+                Riscv::w_a0(retVal); // u a0 upisati retVal
                 break;
             }
-
-
-
-
         }
 
+        TCB::timeSliceCounter = 0; // ovo mozda i ne treba jer ne radim nista asinhrono
+        TCB::dispatch();
+        w_sstatus(sstatus);
+        w_sepc(sepc);
 
-
-//        TCB::timeSliceCounter = 0;
-//        TCB::dispatch();
-//        w_sstatus(sstatus);
-//        w_sepc(sepc);
-
-    }else if (scause == 0x8000000000000001UL){
+    } else if (scause == 0x8000000000000001UL){
 
         // interrupt: yes, cause code: supervisor software interrupt (timer)
         TCB::timeSliceCounter++;
@@ -125,7 +129,12 @@ void Riscv::handleSupervisorTrap() {
         // print sepc
         // print stval
 
+        size_t volatile sepc = r_sepc();
+        printString("Exception! scause: ");
+        printInt(scause);
+        printString("\n sepc: ");
+        printInt(sepc);
+        while (true) {}
+
     }
-
-
 }

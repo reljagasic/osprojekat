@@ -36,11 +36,8 @@ int Semaphore::signal() {
 }
 
 int Semaphore::tryWait() {
-    if (val - 1 >= 0){
-        val--;
-        return 0;
-    }
-    return 1;
+    if(this->closed) return -1;
+    return (val-1 > 0);
 }
 
 int Semaphore::createSemaphore(Semaphore **handle, unsigned int init) {

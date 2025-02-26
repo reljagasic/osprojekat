@@ -25,6 +25,8 @@ int thread_create(thread_t *handle, void (*start_routine)(void *), void *arg) {
 int thread_exit() {
     sysCall(0x12);
     int volatile retVal = (int)Riscv::r_a0();
+    // ovde mozda ima greske
+
     return retVal;
 }
 

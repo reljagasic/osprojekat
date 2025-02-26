@@ -8,6 +8,8 @@
 #include "list.hpp"
 #include "tcb.hpp"
 #include "riscv.hpp"
+#include "syscall_cpp.hpp"
+
 
 class Semaphore {
 
